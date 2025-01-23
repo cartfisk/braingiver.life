@@ -1,0 +1,9 @@
+name,imageUrl,profileUrl,positionName,positionSubtitle,id,parentId,size
+Alex Nutter,assets/images/nutter.jpg,,Chief Emotion Officer,Strategy,1,,
+Carter Konz,assets/images/carter.jpg,,Chief Connectivity Officer,Data Lord,2,1,
+Aaron J. Baum,assets/images/baum.jpg,,Chief Financial Officer,Weed,3,1,
+Ethan Hansen,assets/images/sen.jpg,,Chief Compliance Officer,Hiding,4,1,
+Ryan Olson,assets/images/olson.jpg,,SVP of Music Direction,Wides,5,1,
+Josh Berg,assets/images/berg.jpg,,Chief Information Officer,Wizard,6,1,
+"Alex ""Unc"" Sveda",assets/images/unc.jpg,,Chief Marketing Officer,Photography,7,1,
+RUVINCE Money Gun,assets/images/money-gun.jpg,,Cash Blaster,The Money Cannon,12,2,
