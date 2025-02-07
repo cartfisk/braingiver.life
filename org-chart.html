@@ -1,173 +1,150 @@
-<html>
-<head>
-    <meta charset="UTF-8" />
-    <link rel="stylesheet" type="text/css" href="style.css">
-</head>
-
-<body>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3-org-chart@2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3-flextree@2.1.2/build/d3-flextree.js"></script>
-    <!-- ORG CHART -->
-    <div class="charts">
-        <div
-        class="org-chart-container"
-        style="height: 1200px; background-color: black"
-        >
-        </div>
-        <div
-        class="known-associates-container"
-        style="height: 1200px; background-color: black"
-        >
-        </div>
-    </div>
-
-    <script>
-        var chart;
-        d3.csv(
-        'assets/data/org.csv'
-        ).then((dataFlattened) => {
-            chart = new d3.OrgChart()
-            .container('.org-chart-container')
-            .data(dataFlattened)
-            .rootMargin(100)
-            .nodeWidth((d) => 210)
-            .nodeHeight((d) => 170)
-            .childrenMargin((d) => 130)
-            .compactMarginBetween((d) => 75)
-            .compactMarginPair((d) => 80)
-            .linkUpdate(function (d, i, arr) {
-                d3.select(this)
-                .attr('stroke', (d) =>
-                d.data._upToTheRootHighlighted ? '#152785' : 'lightgray'
-                )
-                .attr('stroke-width', (d) =>
-                d.data._upToTheRootHighlighted ? 5 : 1.5
-                )
-                .attr('stroke-dasharray', '4,4');
-                
-                if (d.data._upToTheRootHighlighted) {
-                    d3.select(this).raise();
-                }
-            })
-            .nodeContent(function (d, i, arr, state) {
-                const colors = [
-                '#222222',
-                '#666666',
-                '#F45754',
-                '#96C62C',
-                '#BD7E16',
-                '#802F74',
-                ];
-                const color = colors[d.depth % colors.length];
-                const imageDim = 80;
-                const lightCircleDim = 95;
-                const outsideCircleDim = 110;
-                
-                return `
-                    <div style="background-color:#888888; position:absolute;width:${
-                d.width
-                }px;height:${d.height}px;">
-                    <div style="background-color:${color};position:absolute;margin-top:-${outsideCircleDim / 2}px;margin-left:${d.width / 2 - outsideCircleDim / 2}px;border-radius:0;width:${outsideCircleDim}px;height:${outsideCircleDim}px;"></div>
-                    <div style="background-color:#000000;position:absolute;margin-top:-${
-                lightCircleDim / 2
-                }px;margin-left:${d.width / 2 - lightCircleDim / 2}px;border-radius:0;width:${lightCircleDim}px;height:${lightCircleDim}px;"></div>
-                    <img src=" ${
-                d.data.imageUrl
-                }" style="position:absolute;margin-top:-${imageDim / 2}px;margin-left:${d.width / 2 - imageDim / 2}px;border-radius:0;width:${imageDim}px;height:${imageDim}px;" />
-                    <div class="card" style="top:${
-                outsideCircleDim / 2 + 10
-                }px;position:absolute;height:30px;width:${d.width}px;background-color:#3AB6E3;">
-                        <div style="background-color:${color};height:28px;text-align:center;padding-top:10px;color:#ffffff;font-weight:bold;font-size:16px">
-                            ${d.data.name} 
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>BRAINGIVER</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <!doctype html>
+    </head>
+    <body class="org-chart">
+        <div class="container-md">
+            <div class="row">
+                <h2 class="fw-bold mt-5 heading">Executive Leadership</h2>
+            </div>
+            <div class="row">
+                <div class="card m-3 p-0 rounded-0" style="max-width: 480px;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="assets/images/nutter.jpg" class="img-fluid" alt="Alex Nutter">
                         </div>
-                        <div style="background-color:#444444;height:28px;text-align:center;padding-top:10px;color:#ffffff;font-size:16px">
-                            ${d.data.positionName} 
-                        </div>
-                        <div style="background-color:#444444;height:24px;text-align:center;padding-top:2px;color:#ffffff;font-size:14px;font-style:italic">
-                            ${d.data.positionSubtitle} 
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">Alex Nutter</h5>
+                                <p class="card-text">Chief Emotion Officer</p>
+                                <p class="card-text fst-italic">Strategy</p>
+                                <a href="https://instagram.com/dealdrugger" class="card-text fw-bold">Learn more about Alex</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-    `;
-            })
-            .render();
-        });
-    </script>
-
-    <script>
-        var chart;
-        d3.csv(
-        'assets/data/associates.csv'
-        ).then((dataFlattened) => {
-            chart = new d3.OrgChart()
-            .container('.known-associates-container')
-            .data(dataFlattened)
-            .rootMargin(100)
-            .nodeWidth((d) => 250)
-            .nodeHeight((d) => 100)
-            .childrenMargin((d) => 130)
-            .compactMarginBetween((d) => 75)
-            .compactMarginPair((d) => 80)
-            .linkUpdate(function (d, i, arr) {
-                d3.select(this)
-                .attr('stroke', (d) =>
-                d.data._upToTheRootHighlighted ? '#152785' : 'lightgray'
-                )
-                .attr('stroke-width', (d) =>
-                d.data._upToTheRootHighlighted ? 5 : 1.5
-                )
-                .attr('stroke-dasharray', '4,4');
-                
-                if (d.data._upToTheRootHighlighted) {
-                    d3.select(this).raise();
-                }
-            })
-            .nodeContent(function (d, i, arr, state) {
-                const colors = [
-                '#222222',
-                '#666666',
-                '#F45754',
-                '#96C62C',
-                '#BD7E16',
-                '#802F74',
-                ];
-                const color = colors[d.depth % colors.length];
-                const imageDim = 80;
-                const lightCircleDim = 95;
-                const outsideCircleDim = 110;
-                
-                return d.data.imageUrl ? 
-                `<div style="background-color:#888888; position:absolute;width:${
-                d.width
-                }px;height:${d.height}px;">
-                    <div style="background-color:${color};position:absolute;margin-top:-${outsideCircleDim / 2}px;margin-left:${d.width / 2 - outsideCircleDim / 2}px;border-radius:0;width:${outsideCircleDim}px;height:${outsideCircleDim}px;"></div>
-                    <div style="background-color:#000000;position:absolute;margin-top:-${
-                lightCircleDim / 2
-                }px;margin-left:${d.width / 2 - lightCircleDim / 2}px;border-radius:0;width:${lightCircleDim}px;height:${lightCircleDim}px;"></div>
-                    <img src=" ${
-                d.data.imageUrl
-                }" style="position:absolute;margin-top:-${imageDim / 2}px;margin-left:${d.width / 2 - imageDim / 2}px;border-radius:0;width:${imageDim}px;height:${imageDim}px;" />
-                    <div class="card" style="top:${
-                outsideCircleDim / 2 + 10
-                }px;position:absolute;height:30px;width:${d.width}px;background-color:#3AB6E3;">
-                        <div style="background-color:${color};height:28px;text-align:center;padding-top:10px;color:#ffffff;font-weight:bold;font-size:16px">
-                            ${d.data.name} 
+                <div class="card m-3 p-0 rounded-0" style="max-width: 480px;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="assets/images/carter.jpg" class="img-fluid" alt="Carter Konz">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">Carter Konz</h5>
+                                <p class="card-text">Chief Connectivity Officer</p>
+                                <p class="card-text fst-italic">Data Lord</p>
+                                <a href="https://instagram.com/vlushairlines" class="card-text fw-bold">Learn more about Carter</a>
+                            </div>
                         </div>
                     </div>
-                </div>` :
-                `<div style="background-color:#888888; position:absolute;width:${
-                d.width
-                }px;height:${d.height - 100}px;">
-                    <div class="card" style="position:absolute;height:30px;width:${d.width}px;background-color:#3AB6E3;">
-                        <div style="background-color:${color};height:28px;text-align:center;padding-top:10px;color:#ffffff;font-weight:bold;font-size:16px">
-                            ${d.data.name} 
+                </div>
+                <div class="card m-3 p-0 rounded-0" style="max-width: 480px;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="assets/images/baum.jpg" class="img-fluid" alt="Aaron J. Baum">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">Aaron J. Baum</h5>
+                                <p class="card-text">Chief Financial Officer</p>
+                                <p class="card-text fst-italic">Weed</p>
+                                <a href="https://instagram.com/ajabaum" class="card-text fw-bold">Learn more about Aaron</a>
+                            </div>
                         </div>
                     </div>
-                </div>`;
-            })
-            .render();
-        });
-    </script>
-</body>
+                </div>
+                <div class="card m-3 p-0 rounded-0" style="max-width: 480px;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="assets/images/sen.jpg" class="img-fluid" alt="Ethan Hansen">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">Ethan Hansen</h5>
+                                <p class="card-text">Chief Compliance Officer</p>
+                                <p class="card-text fst-italic">Hiding</p>
+                                <a href="https://instagram.com/ethan_hansen__" class="card-text fw-bold">Learn more about Ethan</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card m-3 p-0 rounded-0" style="max-width: 480px;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="assets/images/olson.jpg" class="img-fluid" alt="Ryan Olson">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">Ryan Olson</h5>
+                                <p class="card-text">SVP, Music Direction</p>
+                                <p class="card-text fst-italic">Wides</p>
+                                <a href="https://instagram.com/arsononly" class="card-text fw-bold">Learn more about Ryan</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card m-3 p-0 rounded-0" style="max-width: 480px;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="assets/images/berg.jpg" class="img-fluid" alt="Josh Berg">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">Josh Berg</h5>
+                                <p class="card-text">Chief Information Officer</p>
+                                <p class="card-text fst-italic">Wizard</p>
+                                <a href="https://instagram.com/love_burg" class="card-text fw-bold">Learn more about Josh</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card m-3 p-0 rounded-0" style="max-width: 480px;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="assets/images/unc.jpg" class="img-fluid" alt='Alex "Unc" Sveda'>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">Alex "Unc" Sveda</h5>
+                                <p class="card-text">Chief Marketing Officer</p>
+                                <p class="card-text fst-italic">Photography</p>
+                                <a href="https://instagram.com/slamdunkapher" class="card-text fw-bold">Learn more about "Unc"</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card m-3 p-0 rounded-0" style="max-width: 480px;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="assets/images/greg.jpg" class="img-fluid" alt='Alex "Unc" Sveda'>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">Gregory Fox</h5>
+                                <p class="card-text">Chief Transience Officer</p>
+                                <p class="card-text fst-italic">Money Cannons</p>
+                                <a href="https://instagram.com/gdfx" class="card-text fw-bold">Learn more about Greg</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    </body>
 </html>
+<!-- 
+Alex Nutter,assets/images/nutter.jpg,,Chief Emotion Officer,Strategy,1,,
+Carter Konz,assets/images/carter.jpg,,Chief Connectivity Officer,Data Lord,2,1,
+Aaron J. Baum,assets/images/baum.jpg,,Chief Financial Officer,Weed,3,1,
+Ethan Hansen,assets/images/sen.jpg,,Chief Compliance Officer,Hiding,4,1,
+Ryan Olson,assets/images/olson.jpg,,SVP of Music Direction,Wides,5,1,
+Josh Berg,assets/images/berg.jpg,,Chief Information Officer,Wizard,6,1,
+"Alex ""Unc"" Sveda",assets/images/unc.jpg,,Chief Marketing Officer,Photography,7,1,
+RUVINCE Money Gun,assets/images/money-gun.jpg,,Cash Blaster,The Money Cannon,12,2,
+-->
